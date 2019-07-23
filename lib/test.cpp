@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include "SparseMatrix.h"
+#include "Sparse.h"
 
 double gettime() {
     struct timespec start;
@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
     }
 
     start = gettime();
-    SparseMatrix A = SparseMatrix::readFrom(argv[1]);
-    SparseMatrix b = SparseMatrix::readFrom(argv[2]);
+    Sparse A = Sparse::readFrom(argv[1]);
+    Sparse b = Sparse::readFrom(argv[2]);
     printf("Loaded in %lf ms.\n", gettime() - start);
 
     start = gettime();

@@ -4,7 +4,7 @@
 #include <map>
 #include <omp.h>
 #include "Graph.h"
-#include "SparseMatrix.h"
+#include "Sparse.h"
 
 const int thresh = 8;
 const int agg = 128;
@@ -17,7 +17,7 @@ void Node::addOutwardEdge(int to) {
     edgesOut.push_back(to);
 }
 
-Graph::Graph(SparseMatrix &A)
+Graph::Graph(Sparse &A)
 {
     n = A.n;
     adj = new Node[A.n];
@@ -81,7 +81,7 @@ std::vector<std::tuple<int, int>> Graph::LBC() {
     return L;
 }
 
-void SparseMatrix::lsolve(double *b) {
+void Sparse::lsolve(double *b) {
     Graph G(*this);
 
     std::vector<std::tuple<int, int>> L = G.LBC();
@@ -121,8 +121,8 @@ int cmp(double *x, double *y, int n) {
 
 
 int main() {
-    SparseMatrix A = SparseMatrix::readFrom((char*)"af_0_k101.mtx");
-    SparseMatrix b = SparseMatrix::readFrom((char*)"b_sparse_af_0_k101.mtx");
+    Sparse A = Sparse::readFrom((char*)"af_0_k101.mtx");
+    Sparse b = Sparse::readFrom((char*)"b_sparse_af_0_k101.mtx");
     std::cout << "Loaded\n";
     
     double *x = b.dense();

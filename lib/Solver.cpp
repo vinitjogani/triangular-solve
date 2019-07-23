@@ -1,6 +1,6 @@
-#include "SparseMatrix.h"
+#include "Sparse.h"
 
-void SparseMatrix::lsolve(double *b) {
+void Sparse::lsolve(double *b) {
     
     #pragma omp parallel 
     { 

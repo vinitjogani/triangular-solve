@@ -1,23 +1,9 @@
 #pragma once
-#include "SparseMatrix.h"
+#include "Sparse.h"
 #include <set>
 #include <vector>
 #include <tuple>
 
-class Node
-{
-    // Level of the node
-    int level = -1;
-    // Edges of the node
-    std::vector<int> edgesIn, edgesOut;
-
-    public:
-    void addInwardEdge(int);
-    void addOutwardEdge(int);
-
-    friend class Graph;
-    friend class SparseMatrix;
-};
 
 class Graph
 {
@@ -33,8 +19,8 @@ class Graph
     void DFS();
 
     public: 
-    Graph(SparseMatrix&);
+    Graph(Sparse&);
     std::vector<std::tuple<int, int>> LBC();
 
-    friend class SparseMatrix;
+    friend class Sparse;
 };

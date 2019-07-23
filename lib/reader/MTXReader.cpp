@@ -1,8 +1,7 @@
 // System libraries
 #include <stdio.h>
 // Project libraries
-#include "Reader.h"
-#include "MTXReader.h"
+#include "../includes.h"
 
 MTXReader::MTXReader(char *filename) {
     f = fopen(filename, "r");

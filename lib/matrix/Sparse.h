@@ -1,5 +1,4 @@
 #pragma once
-// Project Libraries
 
 class Sparse {
 

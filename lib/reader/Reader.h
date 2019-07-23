@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string>
 // Project libraries
-#include "../Sparse.h"
+#include "../includes.h"
 
 
 const int MAX_LINE_LENGTH = 256;

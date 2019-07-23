@@ -3,7 +3,7 @@
 #include <string>
 #include <stdlib.h>
 // Project libraries
-#include "Reader.h"
+#include "../includes.h"
 
 
 void Reader::error(ReadError code, std::string message) {
@@ -12,7 +12,7 @@ void Reader::error(ReadError code, std::string message) {
 }
 
 void Reader::error(std::string message) {
-    throw(UnknownException, message);
+    error(UnknownException, message);
 }
 
 void Reader::initialize(int m, int n, int nz) {

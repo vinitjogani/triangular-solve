@@ -2,9 +2,9 @@
 // System libraries
 #include <stdio.h>
 // Project libraries
-#include "../Sparse.h"
+#include "../includes.h"
 
-class MTXReader : Reader {
+class MTXReader : public Reader {
     FILE *f;
 
     void readHeader(int&, int&, int&);

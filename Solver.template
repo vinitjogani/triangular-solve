@@ -1,5 +1,0 @@
-#include "SparseMatrix.h"
-
-void SparseMatrix::lsolve(double *b) {
-    <INSERT>
-}

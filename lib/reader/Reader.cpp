@@ -7,7 +7,7 @@
 
 
 void Reader::error(ReadError code, std::string message) {
-    std::cout << "Error code: " << code << ". " << message << ".\n";
+    std::cout << "[-] Error code: " << code << ". " << message << ".\n";
     exit(code);
 }
 

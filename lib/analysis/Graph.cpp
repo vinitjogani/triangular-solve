@@ -3,7 +3,11 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <unordered_set>
 #include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
 // Project libraries
 #include "../includes.h"
 
@@ -22,30 +26,21 @@ Graph::Graph(Sparse &A)
             adj[A.ind[row]].edgesIn.push_back(col);
         }
     }
-
-    for (int col = 0; col < A.n; col++) {
-        if (adj[col].edgesIn.size() == 0) {
-            sourceNodes.push_back(col);
-        }
-    }
-
-    std::cout << "Starting DFS.\n";
-    DFS();
-    std::cout << "DFS done.\n";
 }
 
-void Graph::DFS() {
-    std::vector<int> frontier;
-    for (int source: sourceNodes) {
-        frontier.push_back(source);
+std::unordered_set<int> Graph::DFS(std::vector<int> frontier) {
+    // Use map for constant-time search and space efficiency
+    std::unordered_set<int> explored;
+
+    for (int source = 0; source < n; source++) 
         adj[source].level = 0;
-    }
 
     int node, level, child;
     while (frontier.size() > 0) {
         node = frontier.back();
         frontier.pop_back();
-        
+        explored.insert(node);
+        // Traversing in reverse order is faster for triangular solve matrices
         for (int childI = adj[node].edgesOut.size() - 1;  childI >= 0; childI --) {
             child = adj[node].edgesOut[childI];
             level =  adj[node].level + 1;
@@ -57,7 +52,49 @@ void Graph::DFS() {
         }
     }
 
-    std::cout << "Critical path length = " << P << ".\n";
+    return explored;
+}
+
+std::unordered_set<int> Graph::getReachSet(Sparse &b) {
+    if (b.n != 1) {
+        fprintf(stderr, "[-] Argument must be the RHS vector.\n");
+        exit(1);
+    }
+
+    if (b.m * b.n == b.nz) {
+        std::unordered_set<int> explored;
+        for (int i = 0; i < n; i ++) 
+            explored.insert(i); 
+        return explored;
+    }
+
+    std::vector<int> frontier;
+    for (int i = 0; i < b.ptr[1]; i++) {
+        frontier.push_back(b.ind[i]);
+    }
+
+    return DFS(frontier);
+}
+
+std::map<int, std::vector<int>> Graph::getLevelSets(std::unordered_set<int> reachSet) {
+    std::vector<int> sourceNodes;
+    for (int node : reachSet) {
+        if (adj[node].edgesIn.size() == 0) {
+            sourceNodes.push_back(node);
+        }
+    }
+    std::sort(sourceNodes.begin(), sourceNodes.end());
+
+    DFS(sourceNodes);
+
+    std::map<int, std::vector<int>> levels;
+    for (int i = 0; i < n; i++) {
+        if (reachSet.count(i)) {
+            levels[adj[i].level].push_back(i);
+        }
+    }
+
+    return levels;
 }
 
 std::vector<std::tuple<int, int>> Graph::LBC() {

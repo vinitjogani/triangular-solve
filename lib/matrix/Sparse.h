@@ -19,8 +19,6 @@ class Sparse {
         const int m, n, nz;
         // Constructor takes in number of rows, columns and non-zero entries
         Sparse(int, int, int);
-        // Convert to dense vector
-        double* dense();
 
         void lsolve(double*);
 
@@ -28,4 +26,5 @@ class Sparse {
 
         friend class Graph;
         friend class Reader;
+        friend class Utils;
 };

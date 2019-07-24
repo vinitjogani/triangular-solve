@@ -12,15 +12,6 @@ Sparse::Sparse(int m, int n, int nz) : m(m), n(n), nz(nz) {
     this->val = (double*)malloc(sizeof(double) * nz);
 }
 
-double* Sparse::dense() {
-    double *out = (double*)malloc(sizeof(double) * m);
-    memset(out, 0, m * sizeof(double));
-    for (int i = 0; i < ptr[1]; i++) {
-        out[ind[i]] = val[i];
-    }
-    return out;
-}
-
 void Sparse::_solve(double *b, int j) {
     double tmp;
     int i;

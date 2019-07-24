@@ -2,7 +2,9 @@
 // System libraries
 #include <set>
 #include <vector>
+#include <map>
 #include <tuple>
+#include <unordered_set>
 // Project libraries
 #include "../includes.h"
 
@@ -25,15 +27,15 @@ class Graph
         int P = 0;
         // Adjacency matrix
         Node *adj;
-        // Source nodes 
-        std::vector<int> sourceNodes;
 
-        void DFS();
+        std::unordered_set<int> DFS(std::vector<int> frontier);
 
     public: 
 
         Graph(Sparse&);
-
+        
+        std::unordered_set<int> getReachSet(Sparse &);
+        std::map<int, std::vector<int>> getLevelSets(std::unordered_set<int>);
         std::vector<std::tuple<int, int>> LBC();
 
     friend class Sparse;

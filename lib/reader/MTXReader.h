@@ -5,6 +5,11 @@
 #include "../includes.h"
 
 class MTXReader : public Reader {
+    /*
+        Implements the Reader interface specifically for reading 
+        MTX files.
+     */
+
     FILE *f;
 
     void readHeader(int&, int&, int&);

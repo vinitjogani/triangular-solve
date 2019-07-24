@@ -4,6 +4,7 @@
 #include "../includes.h"
 
 MTXReader::MTXReader(char *filename) {
+    // Open the file for reading
     f = fopen(filename, "r");
     if (f == NULL) error("Could not open file");
 }
@@ -41,11 +42,9 @@ void MTXReader::readContents() {
         else {
             if (row + 1 > M.m) {
                 col++;
-                row = 1;
+                row = 0;
             } 
-            else {
-                row++;
-            }
+            row++;
             if(fscanf(f, "%lf", &val) != 1) {
                 error(FormatError, "Improper format");
             }
@@ -59,6 +58,7 @@ void MTXReader::readContents() {
                 setColumnPointer(i, e);
         }
         col_prev = col;
+        
         // Update row index, subtracting 1 to make it zero-indexed
         setRowPointer(e, row);
     }

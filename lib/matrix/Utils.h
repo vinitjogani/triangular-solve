@@ -5,9 +5,14 @@
 #include "../includes.h"
 
 class Utils {
+    /*
+        An extendable list of convenience methods for this specific
+        problem of triangular systems that ties all other functions together.
+     */
+
     public:
-    static double* toDenseVector(Sparse &);
-    static void timedTest(Reader&, Reader&);
-    static int compareVec(double*, double*, int);
-    static void triangularSolve(std::map<int, std::vector<int>>, Sparse&, double *);
+        static double* toDenseVector(Sparse &);
+        static void timedTest(Reader&, Reader&);
+        static bool compareVec(double*, double*, int);
+        static void triangularSolve(std::map<int, std::vector<int>>, Sparse&, double *);
 };

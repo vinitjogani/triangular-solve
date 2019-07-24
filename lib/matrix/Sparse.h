@@ -1,6 +1,10 @@
 #pragma once
 
 class Sparse {
+    /*
+        Represents a Sparse matrix/vector stored in Compressed
+        Column Storage (CCS) format.
+     */
 
     private:
 
@@ -10,7 +14,7 @@ class Sparse {
         int *ind;
         // Contains the actual values of the non-zero entries
         double *val; 
-
+        // Eliminate a particular column from all depending rows
         void _solve(double*, int);
     
     public:
@@ -19,11 +23,10 @@ class Sparse {
         const int m, n, nz;
         // Constructor takes in number of rows, columns and non-zero entries
         Sparse(int, int, int);
-
-        void lsolve(double*);
-
+        // Sparse matrix to dense vector multiply, to check results
         double *operator *(double*);
 
+        // These classes provide analysis and other utilities
         friend class Graph;
         friend class Reader;
         friend class Utils;

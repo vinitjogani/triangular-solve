@@ -108,12 +108,9 @@ void Utils::timedTest(Reader& readerA, Reader& readerB) {
     testingTime = end - start;
 
     // Print test summary
-    if(testPassed) {
-        std::cout << "[+] Test passed. Summary: \n";
-    } 
-    else {
-        std::cout << "[-] Test failed. Summary: \n";
-    }
+    if(testPassed) std::cout << "[+] Test passed. Summary: \n";
+    else std::cout << "[-] Test failed. Summary: \n";
+    // Print timings
     std::cout << "\t==> Matrices loaded in: \t\t" << loadingTime << " seconds.\n";
     std::cout << "\t==> Sparsity structure analyzed in: \t" << analysisTime << " seconds.\n";
     std::cout << "\t==> Triangular system solved in: \t" << solvingTime << " seconds.\n";

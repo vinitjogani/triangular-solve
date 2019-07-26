@@ -121,39 +121,44 @@ std::map<int, std::vector<int>> Graph::getLevelSets(std::unordered_set<int> reac
 }
 
 bool Graph::operator() (int a, int b) {
+    // Useful for topological sorting
     return adj[a].level < adj[b].level;
 }
 
 std::vector<Partition> Graph::getPartitions(std::map<int, std::vector<int>> levelSets, int l) {
+    // Keep track of what's explored and accumulate partitions
     std::vector<Partition> partitions;
     std::unordered_set<int> explored;
 
     int node;
     for (int i = 0; i < P; i += l) {
+        // A partition is a list of lists of int
+        // representing one chunk of code that can be parallely executed
+        // with each sublist executing serially.
         Partition partition;
         for (unsigned j = 0; j < levelSets[i].size(); j++) {
-            std::vector<int> part;
-
+            // Skip if already explored (i.e. this is not a new connected component)
             if (explored.count(levelSets[i][j])) continue;
+            // Build a part of the partition, with only this element in frontier
+            std::vector<int> part;
             std::vector<int> frontier = {levelSets[i][j]};
 
+            // Perform a variant of DFS to find connected components
             while (frontier.size() > 0) {
+                // Pop the last element off of the frontier
                 node = frontier.back();
                 frontier.pop_back();
-
+                // Only consider the next l levels, and don't reconsider explored nodes
                 if (adj[node].level >= i+l) continue;
                 if (explored.count(node)) continue;
-
+                // Build the partition
                 explored.insert(node);
                 part.push_back(node);
-
-                for(int other : adj[node].edgesIn) {
-                    frontier.push_back(other);
-                }   
-                for(int other : adj[node].edgesOut) {
-                    frontier.push_back(other);
-                }   
+                // Add both incoming and outgoing edges to find connected components
+                for(int other : adj[node].edgesIn) frontier.push_back(other);
+                for(int other : adj[node].edgesOut) frontier.push_back(other);
             }
+            // Perform topological sorting
             std::sort(part.begin(), part.end(), *this);
             partition.push_back(part);
         }

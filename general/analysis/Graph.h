@@ -48,10 +48,9 @@ class Graph
         std::unordered_set<int> getReachSet(Sparse &);
         // Get the level sets, given the reach-Set
         std::map<int, std::vector<int>> getLevelSets(std::unordered_set<int>);
-
+        // Get w-partitions of the level sets, with each set being a particular size
         std::vector<Partition> getPartitions(std::map<int, std::vector<int>>, int);
-
-        // bool levelComparator(int, int);
+        // Use a comparator to compare two nodes by level for topological sorting
         bool operator() (int, int);
 
     friend class Sparse;

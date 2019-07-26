@@ -9,7 +9,7 @@
 
 
 const double CONFIDENCE_INTERVAL = 1e-10;
-
+const int W_PARTITIONS = 10;
 
 double* Utils::toDenseVector(Sparse &M) {
     // Check for a vector
@@ -54,6 +54,21 @@ void Utils::triangularSolve(std::map<int, std::vector<int>> levels, Sparse &A, d
 }
 
 
+void Utils::triangularSolveParitioned(std::vector<Partition> partitions, Sparse &A, double *x) {
+    // Parallely solve each column given the level set analysis.
+    #pragma omp parallel
+    {
+        for (Partition &partition: partitions) {
+            #pragma omp for
+            for(unsigned p = 0; p < partition.size(); p++) {
+                for (int col : partition[p]) {
+                    A._solve(x, col);
+                }
+            }
+        }
+    }
+}
+
 void Utils::timedTest(Reader& readerA, Reader& readerB) {
     double start, end;
     double loadingTime, analysisTime, solvingTime, testingTime;
@@ -65,20 +80,24 @@ void Utils::timedTest(Reader& readerA, Reader& readerB) {
     double *x = Utils::toDenseVector(b);
     end = omp_get_wtime();
     loadingTime = end - start;
+    std::cout << "[1/3] Loading completed.\n";
 
     // Perform analysis
     start = omp_get_wtime();
     Graph G(A);
     std::unordered_set<int> reachSet = G.getReachSet(b);
     std::map<int, std::vector<int>> levels = G.getLevelSets(reachSet);
+    std::vector<Partition> partitions = G.getPartitions(levels, W_PARTITIONS);
     end = omp_get_wtime();
     analysisTime = end - start;
+    std::cout << "[2/3] Analysis completed.\n";
 
     // Actually solve the triangular system
     start = omp_get_wtime();
-    triangularSolve(levels, A, x);
+    triangularSolveParitioned(partitions, A, x);
     end = omp_get_wtime();
     solvingTime = end - start;
+    std::cout << "[3/3] Solving completed.\n";
 
     // Compare results
     start = omp_get_wtime();

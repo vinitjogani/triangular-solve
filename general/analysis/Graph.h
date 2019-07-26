@@ -8,6 +8,8 @@
 // Project libraries
 #include "../includes.h"
 
+typedef std::vector<std::vector<int>> Partition;
+
 struct Node
 {
     /*
@@ -46,6 +48,11 @@ class Graph
         std::unordered_set<int> getReachSet(Sparse &);
         // Get the level sets, given the reach-Set
         std::map<int, std::vector<int>> getLevelSets(std::unordered_set<int>);
+
+        std::vector<Partition> getPartitions(std::map<int, std::vector<int>>, int);
+
+        // bool levelComparator(int, int);
+        bool operator() (int, int);
 
     friend class Sparse;
 };

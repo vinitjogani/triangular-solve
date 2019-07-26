@@ -119,3 +119,46 @@ std::map<int, std::vector<int>> Graph::getLevelSets(std::unordered_set<int> reac
     // Return the computed levels
     return levels;
 }
+
+bool Graph::operator() (int a, int b) {
+    return adj[a].level < adj[b].level;
+}
+
+std::vector<Partition> Graph::getPartitions(std::map<int, std::vector<int>> levelSets, int l) {
+    std::vector<Partition> partitions;
+    std::unordered_set<int> explored;
+
+    int node;
+    for (int i = 0; i < P; i += l) {
+        Partition partition;
+        for (unsigned j = 0; j < levelSets[i].size(); j++) {
+            std::vector<int> part;
+
+            if (explored.count(levelSets[i][j])) continue;
+            std::vector<int> frontier = {levelSets[i][j]};
+
+            while (frontier.size() > 0) {
+                node = frontier.back();
+                frontier.pop_back();
+
+                if (adj[node].level >= i+l) continue;
+                if (explored.count(node)) continue;
+
+                explored.insert(node);
+                part.push_back(node);
+
+                for(int other : adj[node].edgesIn) {
+                    frontier.push_back(other);
+                }   
+                for(int other : adj[node].edgesOut) {
+                    frontier.push_back(other);
+                }   
+            }
+            std::sort(part.begin(), part.end(), *this);
+            partition.push_back(part);
+        }
+        partitions.push_back(partition);
+    }
+
+    return partitions;
+}
